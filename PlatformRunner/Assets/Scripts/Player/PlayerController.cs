@@ -6,49 +6,32 @@ namespace Player
     {
         [SerializeField] private float swipeSpeed;
         [SerializeField] private float forwardSpeed;
-        public LayerMask Ground;
         private Touch _touch;
         private bool _isDragging;
         private Vector3 _currentCursorPos;
         private Vector3 _oldCursorPos;
-        private Rigidbody r;
+        private Rigidbody _rigidbody;
 
         private void Awake()
         {
             Application.targetFrameRate = 500;
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         private void Update()
         {
-            SwipeMovement();
-            ForwardMovement();
+#if UNITY_64
+            SwipeMovementPC();
+#endif
+#if ANDRIOD
+            SwipeMovementMobile();
+#endif
         }
 
-        private void SwipeMovement()
+        private void SwipeMovementPC()
         {
-            // if (!GameManager.instance.isGameOver || !GameManager.instance.isWinThisGame)
-            // {
-            if (Input.touchCount > 0)
-            {
-                _touch = Input.GetTouch(0);
-
-                if (_touch.phase == TouchPhase.Moved)
-                {
-                    var pos = transform.position;
-                    pos.x += _touch.deltaPosition.x * swipeSpeed;
-                    if (pos.x >= 3f)
-                    {
-                        pos.x = 3f;
-                    }
-
-                    if (pos.x <= -3f)
-                    {
-                        pos.x = -3f;
-                    }
-
-                    transform.position = pos;
-                }
-            }
+            var pos = _rigidbody.position;
+            pos.z += Time.deltaTime * forwardSpeed;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -65,7 +48,6 @@ namespace Player
             if (_isDragging)
             {
                 _currentCursorPos = Input.mousePosition;
-                var pos = transform.position;
                 var movementMagnitude = ((_currentCursorPos - _oldCursorPos).magnitude * swipeSpeed) / 400f;
                 if (_currentCursorPos.x < _oldCursorPos.x)
                 {
@@ -73,45 +55,42 @@ namespace Player
                 }
 
                 pos.x += movementMagnitude;
-                if (pos.x >= 7.5f)
-                {
-                    pos.x = 7.5f;
-                }
-
-                if (pos.x <= -7.5f)
-                {
-                    pos.x = -7.5f;
-                }
-
                 _oldCursorPos = _currentCursorPos;
-                transform.position = pos;
             }
-            // }
-        }
 
-        private void ForwardMovement()
-        {
-            var pos = transform.position;
-            pos.z += Time.deltaTime * forwardSpeed;
-            transform.position = pos;
+            pos.x = Mathf.Clamp(pos.x, -7.5f, 7.5f);
+            _rigidbody.MovePosition(pos);
         }
-
-        private void OnCollisionExit(Collision other)
+        private void SwipeMovementMobile()
         {
-            if (other.gameObject.CompareTag("RotatingPlatform"))
+            if (Input.touchCount > 0)
             {
-                transform.parent = null;
+                _touch = Input.GetTouch(0);
+
+                if (_touch.phase == TouchPhase.Moved)
+                {
+                    var pos = _rigidbody.position;
+                    pos.z += Time.deltaTime * forwardSpeed;
+                    pos.x += _touch.deltaPosition.x * swipeSpeed;
+                    pos.x = Mathf.Clamp(pos.x, -7.5f, 7.5f);
+                    _rigidbody.MovePosition(pos);
+                }
             }
         }
+        
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.CompareTag("RotatingPlatform"))
-            {
-                transform.parent = collision.transform;
-            }
             if (collision.gameObject.CompareTag("Obstacle"))
             {
-                Debug.Log("geldi");
+                Debug.Log("DEATH");
+            }
+
+            else if (collision.gameObject.CompareTag("Sticks"))
+            {
+                Vector3 dir = collision.contacts[0].point - transform.position;
+                dir = -dir.normalized;
+                dir.y = 0;
+                GetComponent<Rigidbody>().AddForce(dir * 50f, ForceMode.Impulse);
             }
         }
     }
