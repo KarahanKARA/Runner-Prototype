@@ -11,6 +11,7 @@ namespace Player
         private Vector3 _currentCursorPos;
         private Vector3 _oldCursorPos;
         private Rigidbody _rigidbody;
+        private bool canPlayerMove = true;
 
         private void Awake()
         {
@@ -20,12 +21,15 @@ namespace Player
 
         private void Update()
         {
+            if (canPlayerMove)
+            {
 #if UNITY_64
-            SwipeMovementPC();
+                SwipeMovementPC();
 #endif
 #if ANDRIOD
             SwipeMovementMobile();
 #endif
+            }
         }
 
         private void SwipeMovementPC()
@@ -91,6 +95,15 @@ namespace Player
                 dir = -dir.normalized;
                 dir.y = 0;
                 GetComponent<Rigidbody>().AddForce(dir * 50f, ForceMode.Impulse);
+            }
+            else if(collision.gameObject.CompareTag("FinishTag"))
+            {
+                collision.collider.isTrigger = true;
+            }
+            else if (collision.gameObject.CompareTag("StopPoint"))
+            {
+                canPlayerMove = false;
+                GetComponentInChildren<Animator>().SetBool("Thinking",true);
             }
         }
     }
