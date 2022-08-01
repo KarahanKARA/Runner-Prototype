@@ -23,12 +23,14 @@ namespace Obstacle
                 createdBottomObject.transform.rotation = Quaternion.Euler(90, 90, 0);
                 _minLimit = pos.x - movingDistance / 2f;
                 _maxLimit = pos.x + movingDistance / 2f;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
             }
             else if (moveType == Enums.MoveType.Vertical)
             {
                 createdBottomObject.transform.rotation = Quaternion.Euler(90, 0, 0);
                 _minLimit = pos.z - movingDistance / 2f;
                 _maxLimit = pos.z + movingDistance / 2f;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
             }
 
             createdBottomObject.transform.localScale = new Vector3(.5f, movingDistance / 2, .6f);
