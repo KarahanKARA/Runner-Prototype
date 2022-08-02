@@ -9,6 +9,7 @@ namespace Player
     {
         [SerializeField] private GameObject dustPoof;
         [SerializeField] private float swipeSpeed;
+        [SerializeField] private float mobileSwipeSpeed;
         [SerializeField] private float forwardSpeed;
         private Touch _touch;
         private bool _isDragging;
@@ -42,7 +43,7 @@ namespace Player
 #if UNITY_64
                 SwipeMovementPC();
 #endif
-#if ANDRIOD
+#if UNITY_ANDROID
             SwipeMovementMobile();
 #endif
             }
@@ -113,8 +114,7 @@ namespace Player
                 if (_touch.phase == TouchPhase.Moved)
                 {
                     var pos = _rigidbody.position;
-                    pos.z += Time.deltaTime * forwardSpeed;
-                    pos.x += _touch.deltaPosition.x * swipeSpeed;
+                    pos.x += _touch.deltaPosition.x * mobileSwipeSpeed*Time.deltaTime;
                     pos.x = Mathf.Clamp(pos.x, -11f, 11f);
                     _rigidbody.MovePosition(pos);
                 }
