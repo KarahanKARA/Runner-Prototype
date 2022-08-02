@@ -11,4 +11,10 @@ public static class Enums
         Right,
         Left
     }
+
+    public enum HalfDonatPosition
+    {
+        RightCorner,
+        LeftCorner
+    }
 }

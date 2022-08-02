@@ -23,14 +23,20 @@ namespace Obstacle
                 createdBottomObject.transform.rotation = Quaternion.Euler(90, 90, 0);
                 _minLimit = pos.x - movingDistance / 2f;
                 _maxLimit = pos.x + movingDistance / 2f;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ |
+                                                        RigidbodyConstraints.FreezePositionY |
+                                                        RigidbodyConstraints.FreezeRotationX |
+                                                        RigidbodyConstraints.FreezeRotationZ;
             }
             else if (moveType == Enums.MoveType.Vertical)
             {
                 createdBottomObject.transform.rotation = Quaternion.Euler(90, 0, 0);
                 _minLimit = pos.z - movingDistance / 2f;
                 _maxLimit = pos.z + movingDistance / 2f;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |
+                                                        RigidbodyConstraints.FreezePositionY |
+                                                        RigidbodyConstraints.FreezeRotationX |
+                                                        RigidbodyConstraints.FreezeRotationZ;
             }
 
             createdBottomObject.transform.localScale = new Vector3(.5f, movingDistance / 2, .6f);
@@ -103,30 +109,3 @@ namespace Obstacle
         }
     }
 }
-
-/*
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CameraFollow : MonoBehaviour
-{
-    [SerializeField]
-    private Transform target = null;
-
-    private Vector3 offset;
-    [SerializeField]
-    private float speed;
-
-    void Start()
-    {
-        offset = transform.position - target.position;
-    }
-
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(target.position.x, 1, target.position.z) + offset, Time.deltaTime * speed); 
-    }
-}
-*/

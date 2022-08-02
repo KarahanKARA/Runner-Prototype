@@ -59,3 +59,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 PlatformRunner/Temp/UnityLockfile
+PlatformRunner/Library/ArtifactDB
+PlatformRunner/Library
+PlatformRunner/Logs
+PlatformRunner/obj

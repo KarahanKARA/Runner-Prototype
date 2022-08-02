@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: eb442f597c8c5524aac7a175da2fd5d2
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Full Bleed BB
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 52836a0d5a1d0d8438534fc13892f533, type: 3}
+  - {fileID: 12800000, guid: f6af622333dead1449d72bd8e071e9ef, type: 3}
+  - {fileID: 12800000, guid: e6d3f73567865794292ccb2d036d244a, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
